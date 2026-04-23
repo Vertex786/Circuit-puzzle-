@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Neon Circuit Panic - Schematic Edition</title>
+    <title>Neon Circuit Panic - Ultimate Engineering</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
@@ -15,18 +15,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--tg-theme-bg-color, #050510);
-            color: var(--tg-theme-text-color, #fff);
-            font-family: 'Orbitron', sans-serif;
-            display: flex; justify-content: center; align-items: center;
+            background-color: var(--tg-theme-bg-color, #050510); color: var(--tg-theme-text-color, #fff);
+            font-family: 'Orbitron', sans-serif; display: flex; justify-content: center; align-items: center;
             height: var(--tg-viewport-height, 100vh); padding: 10px; overflow: hidden;
         }
 
         .glass-container {
             background: rgba(10, 10, 20, 0.85); backdrop-filter: blur(15px);
             border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 15px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-            width: 100%; max-width: 500px; height: 95%;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15); width: 100%; max-width: 500px; height: 95%;
             display: flex; flex-direction: column; padding: 15px 20px; position: relative;
         }
 
@@ -38,17 +35,15 @@
             background: rgba(0, 0, 0, 0.6); border: 1px solid #ff007f; border-radius: 10px; padding: 10px;
             flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
             margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(255, 0, 127, 0.2); text-align: center; overflow: hidden;
+            position: relative;
         }
 
         .puzzle-type { font-size: 0.9rem; color: #ff007f; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
-        
         .diagram { width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-        /* Schematic Canvas */
         canvas { max-width: 100%; height: auto; background: rgba(255, 255, 255, 0.02); border-radius: 8px; margin-bottom: 10px;}
 
-        /* KaTeX Customization */
-        .katex { font-size: 1.6rem !important; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
+        .katex { font-size: 1.5rem !important; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
         .katex-display { margin: 0 !important; }
 
         .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -56,8 +51,8 @@
 
         button.option-btn {
             background: rgba(0, 255, 255, 0.05); border: 2px solid #0ff; color: #0ff;
-            padding: 10px 5px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.1s; font-weight: bold;
-            display: flex; justify-content: center; align-items: center; min-height: 50px;
+            padding: 10px 5px; font-size: 1rem; border-radius: 8px; cursor: pointer; transition: 0.1s; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; min-height: 60px;
         }
         button.option-btn .katex { font-size: 1.1rem !important; color: #0ff; text-shadow: none; }
         button.option-btn:active { background: rgba(0, 255, 255, 0.4); transform: scale(0.95); }
@@ -84,7 +79,7 @@
                 <button id="btn-relax" class="mode-btn" onclick="setMode('relax')">RELAXED</button>
             </div>
             <div id="timer-config">
-                <div class="input-group"><label>Max Time (sec):</label><input type="number" id="input-max" value="20" min="5" max="60"></div>
+                <div class="input-group"><label>Max Time (sec):</label><input type="number" id="input-max" value="25" min="5" max="60"></div>
                 <div class="input-group"><label>Min Time (sec):</label><input type="number" id="input-min" value="13" min="2" max="30"></div>
             </div>
         </div>
@@ -112,7 +107,7 @@
     tg.expand(); tg.ready();
 
     let score = 0; let timerInterval; let correctAnswer = null;
-    let isTimerMode = true; let baseMaxTime = 20000, baseMinTime = 13000, timeLeft = baseMaxTime;
+    let isTimerMode = true; let baseMaxTime = 25000, baseMinTime = 13000, timeLeft = baseMaxTime;
     let solvedPuzzles = new Set(); 
 
     function setMode(mode) {
@@ -128,156 +123,157 @@
         document.getElementById('start-screen').style.display = 'flex';
     }
 
-    // --- MATH GENERATORS WITH KaTeX ---
-    function generateAdvancedCalculus() {
-        const vars = ['x', 't', '\\theta'];
-        const v = vars[Math.floor(Math.random() * vars.length)];
-        const types = ['diff_chain', 'diff_prod', 'int_sub', 'int_def'];
-        const type = types[Math.floor(Math.random() * types.length)];
+    const r = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-        let q, a, wrong = [];
-        let a_val = Math.floor(Math.random() * 5) + 2; 
-        let b_val = Math.floor(Math.random() * 5) + 2;
+    // --- MASSIVE COMBINATORIAL MATH GENERATOR ---
+    function generateInfiniteCalculus() {
+        const vars = ['x', 't', 'y', '\\theta', 'z'];
+        const v = vars[r(0, vars.length-1)];
+        
+        // Dynamic formula templates that generate thousands of variations
+        const structures = [
+            // 1. Definite Integral of Exponential
+            () => { let a = r(2,5), b = r(1,3); return { q: `\\int_{0}^{\\ln(${a})} e^{${b}${v}} d${v}`, a: `\\frac{${Math.pow(a, b)} - 1}{${b}}`, w: [`\\frac{${Math.pow(a, b)}}{${b}}`, `${Math.pow(a, b)} - 1`, `\\frac{${a} - 1}{${b}}`] }; },
+            
+            // 2. L'Hopital's Rule Limit
+            () => { let a = r(2,7), b = r(2,7); return { q: `\\lim_{${v} \\to 0} \\frac{\\sin(${a}${v})}{${b}${v}}`, a: `\\frac{${a}}{${b}}`, w: [`0`, `\\infty`, `\\frac{${b}}{${a}}`] }; },
+            
+            // 3. Limit approaching infinity
+            () => { let a = r(2,5), b = r(2,5); return { q: `\\lim_{${v} \\to \\infty} \\frac{${a}${v}^2 - 1}{${b}${v}^2 + ${v}}`, a: `\\frac{${a}}{${b}}`, w: [`0`, `\\infty`, `\\frac{${a}}{${b+1}}`] }; },
+            
+            // 4. Product Rule with Trig & Exp
+            () => { let a = r(2,5); return { q: `\\frac{d}{d${v}} [e^{${a}${v}} \\sin(${v})]`, a: `e^{${a}${v}}(${a}\\sin(${v}) + \\cos(${v}))`, w: [`e^{${a}${v}}\\cos(${v})`, `${a}e^{${a}${v}}\\cos(${v})`, `e^{${a}${v}}(\\sin(${v}) + ${a}\\cos(${v}))`] }; },
+            
+            // 5. Integral of Logarithm (By parts)
+            () => { let a = r(2,5); return { q: `\\int \\ln(${a}${v}) d${v}`, a: `${v}\\ln(${a}${v}) - ${v} + C`, w: [`\\frac{1}{${a}${v}} + C`, `${v}\\ln(${v}) - ${a}${v} + C`, `\\frac{\\ln(${a}${v})}{${v}} + C`] }; },
+            
+            // 6. Hyperbolic Differentiation
+            () => { let a = r(2,6); return { q: `\\frac{d}{d${v}} [\\cosh(${a}${v}^2)]`, a: `${2*a}${v}\\sinh(${a}${v}^2)`, w: [`-${2*a}${v}\\sinh(${a}${v}^2)`, `\\sinh(${a}${v}^2)`, `${a}\\sinh(${a}${v}^2)`] }; },
+            
+            // 7. Chain rule inside Chain rule
+            () => { let a = r(2,4); return { q: `\\frac{d}{d${v}} [\\sin^2(${a}${v})]`, a: `${a}\\sin(${2*a}${v})`, w: [`2\\sin(${a}${v})\\cos(${a}${v})`, `${2*a}\\cos^2(${a}${v})`, `${a}\\cos(${2*a}${v})`] }; },
+            
+            // 8. Partial Fraction integration style
+            () => { let a = r(1,3); return { q: `\\int \\frac{1}{${v}^2 - ${a*a}} d${v}`, a: `\\frac{1}{${2*a}} \\ln\\left|\\frac{${v}-${a}}{${v}+${a}}\\right| + C`, w: [`\\frac{1}{${a}} \\tan^{-1}(\\frac{${v}}{${a}}) + C`, `\\ln|${v}^2 - ${a*a}| + C`, `\\frac{1}{${2*a}} \\ln\\left|\\frac{${v}+${a}}{${v}-${a}}\\right| + C`] }; }
+        ];
 
-        if (type === 'diff_chain') {
-            q = `\\frac{d}{d${v}} \\left[ \\ln(${a_val}${v}^2 + ${b_val}) \\right]`;
-            a = `\\frac{${2 * a_val}${v}}{${a_val}${v}^2 + ${b_val}}`;
-            wrong = [`\\frac{1}{${a_val}${v}^2 + ${b_val}}`, `\\frac{${a_val}${v}}{${a_val}${v}^2 + ${b_val}}`, `\\frac{${2 * a_val}${v}}{\\ln(${a_val}${v}^2 + ${b_val})}`];
-        } else if (type === 'diff_prod') {
-            let n = Math.floor(Math.random() * 3) + 2; 
-            q = `\\frac{d}{d${v}} \\left[ ${v}^{${n}} e^{${a_val}${v}} \\right]`;
-            a = `${v}^{${n-1}} e^{${a_val}${v}} (${n} + ${a_val}${v})`;
-            wrong = [`${v}^{${n}} e^{${a_val}${v}} (${n} + ${a_val}${v})`, `${n}${v}^{${n-1}} e^{${a_val}${v}}`, `${v}^{${n-1}} e^{${a_val}${v}} (${n}${v} + ${a_val})`];
-        } else if (type === 'int_sub') {
-            let coeff = 2 * a_val;
-            q = `\\int ${coeff}${v} \\cos(${a_val}${v}^2) d${v}`;
-            a = `\\sin(${a_val}${v}^2) + C`;
-            wrong = [`-\\sin(${a_val}${v}^2) + C`, `${coeff} \\sin(${a_val}${v}^2) + C`, `\\cos(${a_val}${v}^2) + C`];
+        let selected = structures[r(0, structures.length - 1)]();
+        correctAnswer = selected.a;
+        return { type: "Advanced Calculus", id: `Calc_${selected.q}_${Math.random()}`, diagram: selected.q, options: [selected.a, ...selected.w].sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
+    }
+
+    // --- COMPLEX CIRCUIT GENERATOR ---
+    function generateComplexCircuit() {
+        const types = ['wheatstone', 'req'];
+        const type = types[r(0, 1)];
+        
+        let canvasHtml = '';
+        let renderCanvas = null;
+
+        if(type === 'wheatstone') {
+            // Wheatstone Bridge: Balanced or Unbalanced
+            let isBalanced = Math.random() > 0.5;
+            let R1 = r(1, 5) * 2; let R2 = r(1, 5) * 2;
+            let R3 = isBalanced ? (R1 * 2) : r(1, 5) * 3;
+            let R4 = isBalanced ? (R2 * 2) : r(1, 5) * 3 + 1; // Force unbalance
+            
+            // If balanced, current through Galvanometer (middle) is 0A
+            correctAnswer = isBalanced ? "0A" : "I > 0A";
+            
+            canvasHtml = `<div style="font-family:'Fira Code'; color:#aaa; font-size:0.8rem; margin-bottom:5px;">Current through middle (Ig) = ?</div><canvas id="circuitCanvas" width="300" height="200"></canvas>`;
+            
+            renderCanvas = () => {
+                const ctx = document.getElementById('circuitCanvas').getContext('2d');
+                ctx.strokeStyle = '#0ff'; ctx.lineWidth = 2; ctx.fillStyle = '#fff'; ctx.font = '14px Fira Code';
+                
+                // Draw Diamond Bridge
+                ctx.beginPath(); ctx.moveTo(150, 20); ctx.lineTo(80, 100); ctx.lineTo(150, 180); ctx.lineTo(220, 100); ctx.closePath(); ctx.stroke();
+                // Draw Middle Wire
+                ctx.beginPath(); ctx.moveTo(80, 100); ctx.lineTo(220, 100); ctx.stroke();
+                
+                // Add Resistor labels (simulated visuals)
+                ctx.fillStyle = '#0f0'; ctx.fillText(`${R1}Ω`, 90, 55); ctx.fillText(`${R2}Ω`, 180, 55);
+                ctx.fillText(`${R3}Ω`, 90, 160); ctx.fillText(`${R4}Ω`, 180, 160);
+                
+                // Middle Meter
+                ctx.beginPath(); ctx.arc(150, 100, 15, 0, Math.PI*2); ctx.fillStyle = '#000'; ctx.fill(); ctx.stroke();
+                ctx.fillStyle = '#ff007f'; ctx.fillText('Ig', 143, 105);
+            };
+            return { type: "Bridge Circuit", id: `Circ_W_${Math.random()}`, diagram: canvasHtml, render: renderCanvas, options: ['0A', 'I > 0A'], isLatex: false, layout: 'full' };
         } else {
-            q = `\\int_{0}^{1} ${a_val * b_val} e^{${b_val}${v}} d${v}`;
-            a = `${a_val}(e^{${b_val}} - 1)`;
-            wrong = [`${a_val}e^{${b_val}}`, `${a_val * b_val}(e^{${b_val}} - 1)`, `${b_val}(e^{${a_val}} - 1)`];
+            // Equivalent Resistance
+            let R1 = r(1,4)*3; // Multiple of 3
+            let R2 = R1 / 3; // Ensures R1||R2 is friendly. e.g. 6 and 2 => 1.5, wait, let's use standard pairs.
+            const pairs = [[6,3,2], [12,4,3], [20,5,4], [8,8,4], [10,10,5]]; // [R1, R2, Req_parallel]
+            let pair = pairs[r(0, pairs.length-1)];
+            let Rseries = r(1, 10);
+            
+            let totalReq = pair[2] + Rseries;
+            correctAnswer = `${totalReq}Ω`;
+            let w = [`${pair[0]+pair[1]+Rseries}Ω`, `${Math.abs(totalReq-2)}Ω`, `${totalReq+2}Ω`];
+
+            canvasHtml = `<div style="font-family:'Fira Code'; color:#aaa; font-size:0.8rem; margin-bottom:5px;">Find Equivalent Resistance (Req):</div><canvas id="circuitCanvas" width="300" height="200"></canvas>`;
+            
+            renderCanvas = () => {
+                const ctx = document.getElementById('circuitCanvas').getContext('2d');
+                ctx.strokeStyle = '#0ff'; ctx.lineWidth = 2; ctx.fillStyle = '#fff'; ctx.font = '14px Fira Code';
+                
+                // Input nodes
+                ctx.beginPath(); ctx.arc(30, 100, 4, 0, Math.PI*2); ctx.fill(); ctx.fillText('A', 15, 105);
+                ctx.beginPath(); ctx.moveTo(30, 100); ctx.lineTo(80, 100); ctx.stroke();
+                
+                // Series Resistor Box
+                ctx.strokeRect(80, 85, 40, 30); ctx.fillStyle = '#0f0'; ctx.fillText(`${Rseries}Ω`, 85, 105);
+                
+                // Split to parallel
+                ctx.beginPath(); ctx.moveTo(120, 100); ctx.lineTo(150, 100); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(150, 50); ctx.lineTo(150, 150); ctx.stroke();
+                
+                // Top Parallel
+                ctx.beginPath(); ctx.moveTo(150, 50); ctx.lineTo(180, 50); ctx.stroke();
+                ctx.strokeRect(180, 35, 40, 30); ctx.fillText(`${pair[0]}Ω`, 185, 55);
+                ctx.beginPath(); ctx.moveTo(220, 50); ctx.lineTo(250, 50); ctx.stroke();
+                
+                // Bottom Parallel
+                ctx.beginPath(); ctx.moveTo(150, 150); ctx.lineTo(180, 150); ctx.stroke();
+                ctx.strokeRect(180, 135, 40, 30); ctx.fillText(`${pair[1]}Ω`, 185, 155);
+                ctx.beginPath(); ctx.moveTo(220, 150); ctx.lineTo(250, 150); ctx.stroke();
+                
+                // Join Parallel
+                ctx.beginPath(); ctx.moveTo(250, 50); ctx.lineTo(250, 150); ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(250, 100); ctx.lineTo(280, 100); ctx.stroke();
+                ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(280, 100, 4, 0, Math.PI*2); ctx.fill(); ctx.fillText('B', 285, 105);
+            };
+            return { type: "Network Analysis", id: `Circ_Req_${Math.random()}`, diagram: canvasHtml, render: renderCanvas, options: [correctAnswer, ...w].sort(()=>Math.random()-0.5), isLatex: false, layout: 'grid' };
+        }
+    }
+
+    function generateHardBaseConversion() {
+        let val = r(50, 250);
+        let types = ['hex_bin', 'dec_oct', 'bin_hex'];
+        let type = types[r(0, types.length - 1)];
+        let q, a, wrong = [];
+        if(type === 'hex_bin') {
+            q = `${val.toString(16).toUpperCase()}_{16} = ?_{2}`;
+            a = `${val.toString(2)}_{2}`;
+            wrong = [`${(val+1).toString(2)}_{2}`, `${(val^15).toString(2)}_{2}`, `${(val<<1).toString(2).substring(0, val.toString(2).length)}_{2}`];
+        } else if (type === 'dec_oct') {
+            q = `${val}_{10} = ?_{8}`;
+            a = `${val.toString(8)}_{8}`;
+            wrong = [`${(val+8).toString(8)}_{8}`, `${(val-8).toString(8)}_{8}`, `${parseInt(val.toString(), 8).toString()}_{8}`];
+        } else {
+            q = `${val.toString(2)}_{2} = ?_{16}`;
+            a = `${val.toString(16).toUpperCase()}_{16}`;
+            wrong = [`${(val+1).toString(16).toUpperCase()}_{16}`, `${(val^255).toString(16).toUpperCase()}_{16}`, `${(val-1).toString(16).toUpperCase()}_{16}`];
         }
         correctAnswer = a;
-        return { type: "Advanced Calculus", id: `Calc_${q}_${Math.random()}`, diagram: q, options: [a, ...wrong].sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
-    }
-
-    function generateAdvancedBoolean() {
-        const templates = [
-            { q: `(A + B)' + (A'B)'`, a: `1`, w: [`A'`, `B'`, `A'B`] },
-            { q: `A(A + B) + B(B + C)`, a: `A + B`, w: [`A + BC`, `AB + BC`, `B + C`] },
-            { q: `(X + Y)(X' + Z)(Y + Z)`, a: `(X + Y)(X' + Z)`, w: [`(X+Z)(Y+Z)`, `X'Y + XZ`, `XYZ`] }
-        ];
-        let p = templates[Math.floor(Math.random() * templates.length)];
-        let v1 = Math.random() > 0.5 ? 'P' : 'X'; let v2 = Math.random() > 0.5 ? 'Q' : 'Y'; let v3 = Math.random() > 0.5 ? 'R' : 'Z';
-        let q_str = "F = " + p.q.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3);
-        let a_str = p.a.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3);
-        let w_strs = p.w.map(w => w.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3));
-        correctAnswer = a_str;
-        return { type: "Boolean Theorem", id: `Bool_${q_str}_${Math.random()}`, diagram: q_str, options: [a_str, ...w_strs].sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
-    }
-
-    // --- HTML5 CANVAS SCHEMATIC GENERATOR ---
-    function generateSchematicCircuit() {
-        const s1 = Math.random() > 0.5; // Series switch (Main)
-        const s2 = Math.random() > 0.5; // Parallel switch (Short circuit path)
-        
-        // Engineering Logic: 
-        // If s1 is open, no current flows (OFF).
-        // If s1 is closed AND s2 is closed, current takes the short circuit path, bypassing the bulb (OFF).
-        // If s1 is closed AND s2 is open, current flows through the bulb (ON).
-        const isOn = s1 && !s2;
-        correctAnswer = isOn ? "ON" : "OFF";
-        
-        const canvasHtml = `
-            <div style="font-family:'Fira Code'; color:#aaa; font-size:0.9rem; margin-bottom:5px;">Find Bulb State:</div>
-            <canvas id="circuitCanvas" width="300" height="200"></canvas>
-        `;
-
-        const renderCanvas = () => {
-            const canvas = document.getElementById('circuitCanvas');
-            if(!canvas) return;
-            const ctx = canvas.getContext('2d');
-            
-            // Neon Style
-            ctx.strokeStyle = '#0ff';
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-
-            // Left Wire & DC Source
-            ctx.beginPath(); ctx.moveTo(40, 50); ctx.lineTo(40, 80); ctx.stroke();
-            ctx.beginPath(); ctx.arc(40, 100, 20, 0, Math.PI*2); ctx.stroke();
-            ctx.fillStyle = '#0ff'; ctx.font = '18px Orbitron'; 
-            ctx.fillText('+', 34, 94); ctx.fillText('-', 36, 118);
-            ctx.beginPath(); ctx.moveTo(40, 120); ctx.lineTo(40, 150); ctx.stroke();
-
-            // Bottom Wire
-            ctx.beginPath(); ctx.moveTo(40, 150); ctx.lineTo(260, 150); ctx.stroke();
-
-            // Top Wire & S1
-            ctx.beginPath(); ctx.moveTo(40, 50); ctx.lineTo(100, 50); ctx.stroke();
-            ctx.fillStyle = '#fff';
-            ctx.beginPath(); ctx.arc(100, 50, 4, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath();
-            if(s1) { ctx.moveTo(100, 50); ctx.lineTo(140, 50); ctx.strokeStyle='#0f0';} // Closed
-            else { ctx.moveTo(100, 50); ctx.lineTo(135, 30); ctx.strokeStyle='#f00';} // Open
-            ctx.stroke(); ctx.strokeStyle='#0ff'; // Reset color
-            ctx.beginPath(); ctx.arc(140, 50, 4, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.moveTo(140, 50); ctx.lineTo(260, 50); ctx.stroke();
-            ctx.fillStyle = '#aaa'; ctx.font = '12px Fira Code'; ctx.fillText('S1', 115, 25);
-
-            // Middle Wire (Short Circuit Path) & S2
-            ctx.beginPath(); ctx.moveTo(150, 50); ctx.lineTo(150, 80); ctx.stroke();
-            ctx.fillStyle = '#fff';
-            ctx.beginPath(); ctx.arc(150, 80, 4, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath();
-            if(s2) { ctx.moveTo(150, 80); ctx.lineTo(150, 120); ctx.strokeStyle='#0f0'; } // Closed
-            else { ctx.moveTo(150, 80); ctx.lineTo(175, 115); ctx.strokeStyle='#f00'; } // Open
-            ctx.stroke(); ctx.strokeStyle='#0ff'; // Reset color
-            ctx.beginPath(); ctx.arc(150, 120, 4, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.moveTo(150, 120); ctx.lineTo(150, 150); ctx.stroke();
-            ctx.fillStyle = '#aaa'; ctx.fillText('S2', 170, 100);
-
-            // Right Wire & Bulb
-            ctx.beginPath(); ctx.moveTo(260, 50); ctx.lineTo(260, 80); ctx.stroke();
-            ctx.beginPath(); ctx.arc(260, 100, 20, 0, Math.PI*2); ctx.stroke();
-            // Cross inside bulb
-            ctx.beginPath(); ctx.moveTo(246, 86); ctx.lineTo(274, 114); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(274, 86); ctx.lineTo(246, 114); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(260, 120); ctx.lineTo(260, 150); ctx.stroke();
-            ctx.fillStyle = '#ff007f'; ctx.fillText('Bulb', 245, 140);
-            
-            // Nodes (Connection dots)
-            ctx.fillStyle = '#fff';
-            ctx.beginPath(); ctx.arc(150, 50, 4, 0, Math.PI*2); ctx.fill();
-            ctx.beginPath(); ctx.arc(150, 150, 4, 0, Math.PI*2); ctx.fill();
-        };
-
-        return { 
-            type: "Schematic Logic", 
-            id: `CanvasCirc_${s1}_${s2}_${Math.random()}`, 
-            diagram: canvasHtml, 
-            render: renderCanvas,
-            options: ['ON', 'OFF'], 
-            isLatex: false, 
-            layout: 'full' 
-        };
+        return { type: "Base Conversion", id: `Base_${val}_${type}_${Math.random()}`, diagram: q, options: [a, ...wrong].slice(0,4).sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
     }
 
     // --- GAME ENGINE ---
     function loadRandomPuzzle() {
-        const generators = [generateAdvancedCalculus, generateAdvancedBoolean, generateSchematicCircuit];
-        let puzzleData;
-        let attempts = 0;
-        
-        do {
-            puzzleData = generators[Math.floor(Math.random() * generators.length)]();
-            attempts++;
-            if(attempts > 50) { solvedPuzzles.clear(); break; }
-        } while (solvedPuzzles.has(puzzleData.id));
-
-        solvedPuzzles.add(puzzleData.id);
+        const generators = [generateInfiniteCalculus, generateComplexCircuit, generateHardBaseConversion];
+        let puzzleData = generators[r(0, generators.length - 1)]();
         
         document.getElementById('puzzle-type').innerText = puzzleData.type;
         const diagramEl = document.getElementById('diagram');
@@ -286,7 +282,7 @@
             katex.render(puzzleData.diagram, diagramEl, { displayMode: true, throwOnError: false });
         } else {
             diagramEl.innerHTML = puzzleData.diagram;
-            if(puzzleData.render) puzzleData.render(); // Draw Canvas!
+            if(puzzleData.render) puzzleData.render(); 
         }
         
         const optContainer = document.getElementById('options');
@@ -296,10 +292,8 @@
         puzzleData.options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn'; 
-            
-            if (puzzleData.isLatex) { katex.render(opt, btn, { throwOnError: false }); } 
+            if (puzzleData.isLatex && !opt.includes('Ω')) { katex.render(opt, btn, { throwOnError: false }); } 
             else { btn.innerHTML = opt; }
-
             btn.onclick = () => handleAnswer(opt);
             optContainer.appendChild(btn);
         });
@@ -319,15 +313,10 @@
             timeLeft -= 50; 
             let percent = (timeLeft / currentMaxTime) * 100;
             timerBar.style.width = percent + '%';
-
             if(percent > 50) timerBar.style.backgroundColor = '#0f0';
             else if(percent > 20) timerBar.style.backgroundColor = '#ffaa00';
             else timerBar.style.backgroundColor = '#ff0000';
-
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                gameOver("TIME OUT!");
-            }
+            if (timeLeft <= 0) { clearInterval(timerInterval); gameOver("TIME OUT!"); }
         }, 50);
     }
 
@@ -351,30 +340,21 @@
 
     function startGame() {
         tg.HapticFeedback.impactOccurred('medium');
-        solvedPuzzles.clear(); 
 
         if (isTimerMode) {
-            let uMax = parseInt(document.getElementById('input-max').value);
-            let uMin = parseInt(document.getElementById('input-min').value);
-            baseMaxTime = (isNaN(uMax) || uMax < 2) ? 20000 : uMax * 1000;
-            baseMinTime = (isNaN(uMin) || uMin < 1) ? 13000 : uMin * 1000;
+            let uMax = parseInt(document.getElementById('input-max').value); let uMin = parseInt(document.getElementById('input-min').value);
+            baseMaxTime = (isNaN(uMax) || uMax < 2) ? 25000 : uMax * 1000; baseMinTime = (isNaN(uMin) || uMin < 1) ? 13000 : uMin * 1000;
             if(baseMinTime > baseMaxTime) baseMinTime = baseMaxTime; 
-
-            document.getElementById('timer-ui').style.display = 'block';
-            document.getElementById('min-time-display').innerText = `MIN: ${baseMinTime/1000}s`;
+            document.getElementById('timer-ui').style.display = 'block'; document.getElementById('min-time-display').innerText = `MIN: ${baseMinTime/1000}s`;
         } else {
-            document.getElementById('timer-ui').style.display = 'none';
-            document.getElementById('min-time-display').innerText = `RELAXED`;
+            document.getElementById('timer-ui').style.display = 'none'; document.getElementById('min-time-display').innerText = `RELAXED`;
         }
 
-        score = 0;
-        document.getElementById('score').innerText = score;
-        document.getElementById('start-screen').style.display = 'none';
-        document.getElementById('game-over-screen').style.display = 'none';
+        score = 0; document.getElementById('score').innerText = score;
+        document.getElementById('start-screen').style.display = 'none'; document.getElementById('game-over-screen').style.display = 'none';
         
         setTimeout(loadRandomPuzzle, 100);
     }
-
 </script>
 </body>
 </html>
