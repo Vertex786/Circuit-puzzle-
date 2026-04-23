@@ -3,223 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Neon Circuit Panic - Pro Settings</title>
+    <title>Neon Circuit Panic - Schematic Edition</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Fira+Code:wght@400;700&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--tg-theme-bg-color, #050510);
             color: var(--tg-theme-text-color, #fff);
             font-family: 'Orbitron', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: var(--tg-viewport-height, 100vh);
-            padding: 10px;
-            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            height: var(--tg-viewport-height, 100vh); padding: 10px; overflow: hidden;
         }
 
         .glass-container {
-            background: rgba(10, 10, 20, 0.85);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 15px;
+            background: rgba(10, 10, 20, 0.85); backdrop-filter: blur(15px);
+            border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 15px;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
-            width: 100%;
-            max-width: 500px;
-            height: 95%;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            position: relative;
+            width: 100%; max-width: 500px; height: 95%;
+            display: flex; flex-direction: column; padding: 15px 20px; position: relative;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #0ff;
-            text-shadow: 0 0 10px #0ff;
-        }
-
-        .timer-container {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            overflow: hidden;
-            margin-bottom: 20px;
-        }
-
-        .timer-bar {
-            height: 100%;
-            width: 100%;
-            background: #0f0;
-            transition: width 0.1s linear, background-color 0.3s;
-            box-shadow: 0 0 10px #0f0;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; font-size: 1.2rem; margin-bottom: 10px; color: #0ff; text-shadow: 0 0 10px #0ff; }
+        .timer-container { width: 100%; height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 4px; overflow: hidden; margin-bottom: 15px; }
+        .timer-bar { height: 100%; width: 100%; background: #0f0; transition: width 0.1s linear, background-color 0.3s; box-shadow: 0 0 10px #0f0; }
 
         .question-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid #ff007f;
-            border-radius: 10px;
-            padding: 15px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: inset 0 0 20px rgba(255, 0, 127, 0.2);
-            text-align: center;
+            background: rgba(0, 0, 0, 0.6); border: 1px solid #ff007f; border-radius: 10px; padding: 10px;
+            flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            margin-bottom: 15px; box-shadow: inset 0 0 20px rgba(255, 0, 127, 0.2); text-align: center; overflow: hidden;
         }
 
-        .puzzle-type {
-            font-size: 0.9rem;
-            color: #ff007f;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .puzzle-type { font-size: 0.9rem; color: #ff007f; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .diagram { width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
-        .diagram {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.1rem;
-            color: #fff;
-            white-space: pre-wrap;
-            line-height: 1.6;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-        }
+        /* Schematic Canvas */
+        canvas { max-width: 100%; height: auto; background: rgba(255, 255, 255, 0.02); border-radius: 8px; margin-bottom: 10px;}
 
-        .options-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
+        /* KaTeX Customization */
+        .katex { font-size: 1.6rem !important; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.5); }
+        .katex-display { margin: 0 !important; }
 
-        .options-grid.full {
-            grid-template-columns: 1fr;
-        }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .options-grid.full { grid-template-columns: 1fr; }
 
         button.option-btn {
-            background: rgba(0, 255, 255, 0.05);
-            border: 2px solid #0ff;
-            color: #0ff;
-            padding: 15px;
-            font-size: 1.1rem;
-            font-family: 'Fira Code', monospace;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.1s;
-            font-weight: bold;
+            background: rgba(0, 255, 255, 0.05); border: 2px solid #0ff; color: #0ff;
+            padding: 10px 5px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; transition: 0.1s; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; min-height: 50px;
         }
+        button.option-btn .katex { font-size: 1.1rem !important; color: #0ff; text-shadow: none; }
+        button.option-btn:active { background: rgba(0, 255, 255, 0.4); transform: scale(0.95); }
 
-        button.option-btn:active {
-            background: rgba(0, 255, 255, 0.4);
-            transform: scale(0.95);
-        }
-
-        /* Overlay & Settings Styles */
-        .overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(5, 5, 16, 0.95);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .overlay h1 {
-            color: #f00;
-            text-shadow: 0 0 20px #f00;
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-        }
-
-        .settings-box {
-            background: rgba(0, 255, 255, 0.05);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .mode-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .mode-btn {
-            flex: 1;
-            padding: 10px;
-            background: transparent;
-            border: 1px solid #aaa;
-            color: #aaa;
-            border-radius: 8px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .mode-btn.active {
-            background: rgba(0, 255, 255, 0.2);
-            border-color: #0ff;
-            color: #0ff;
-            box-shadow: 0 0 10px #0ff;
-        }
-
-        .input-group {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-
-        .input-group input {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #0ff;
-            color: #0ff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            width: 70px;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-        }
-
-        .start-btn, .restart-btn {
-            background: #ff007f;
-            color: #fff;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-family: 'Orbitron', sans-serif;
-            border-radius: 10px;
-            box-shadow: 0 0 20px #ff007f;
-            cursor: pointer;
-            width: 100%;
-        }
+        .overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 5, 16, 0.95); border-radius: 15px; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; padding: 20px; text-align: center; }
+        .overlay h1 { color: #f00; text-shadow: 0 0 20px #f00; font-size: 2.2rem; margin-bottom: 10px; }
+        .settings-box { background: rgba(0, 255, 255, 0.05); border: 1px solid rgba(0, 255, 255, 0.3); border-radius: 10px; padding: 15px; width: 100%; margin-bottom: 20px; }
+        .mode-buttons { display: flex; gap: 10px; margin-bottom: 15px; }
+        .mode-btn { flex: 1; padding: 10px; background: transparent; border: 1px solid #aaa; color: #aaa; border-radius: 8px; font-family: 'Orbitron', sans-serif; cursor: pointer; transition: 0.3s; }
+        .mode-btn.active { background: rgba(0, 255, 255, 0.2); border-color: #0ff; color: #0ff; box-shadow: 0 0 10px #0ff; }
+        .input-group { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; color: #ccc; }
+        .input-group input { background: rgba(0, 0, 0, 0.5); border: 1px solid #0ff; color: #0ff; padding: 5px 10px; border-radius: 5px; width: 70px; text-align: center; font-family: 'Orbitron', sans-serif; font-weight: bold; }
+        .start-btn, .restart-btn { background: #ff007f; color: #fff; border: none; padding: 15px 40px; font-size: 1.2rem; font-family: 'Orbitron', sans-serif; border-radius: 10px; box-shadow: 0 0 20px #ff007f; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
@@ -227,26 +78,16 @@
 <div class="glass-container">
     <div id="start-screen" class="overlay">
         <h1 style="color: #0ff; text-shadow: 0 0 20px #0ff;">MIND MATRIX</h1>
-        
         <div class="settings-box">
             <div class="mode-buttons">
                 <button id="btn-timer" class="mode-btn active" onclick="setMode('timer')">TIMER</button>
                 <button id="btn-relax" class="mode-btn" onclick="setMode('relax')">RELAXED</button>
             </div>
-
             <div id="timer-config">
-                <div class="input-group">
-                    <label>Max Time (sec):</label>
-                    <input type="number" id="input-max" value="20" min="5" max="60">
-                </div>
-                <div class="input-group">
-                    <label>Min Time (sec):</label>
-                    <input type="number" id="input-min" value="13" min="2" max="30">
-                </div>
+                <div class="input-group"><label>Max Time (sec):</label><input type="number" id="input-max" value="20" min="5" max="60"></div>
+                <div class="input-group"><label>Min Time (sec):</label><input type="number" id="input-min" value="13" min="2" max="30"></div>
             </div>
-            <p id="relax-text" style="display: none; font-size: 0.8rem; color: #0f0;">No time limit. Play at your own pace.</p>
         </div>
-
         <button class="start-btn" onclick="startGame()">INITIALIZE</button>
     </div>
 
@@ -261,42 +102,25 @@
         <span id="min-time-display" style="font-size:0.9rem; color:#aaa;">MIN: 13s</span>
     </div>
 
-    <div class="timer-container" id="timer-ui">
-        <div id="timer-bar" class="timer-bar"></div>
-    </div>
-
-    <div class="question-box">
-        <div id="puzzle-type" class="puzzle-type">LOADING...</div>
-        <div id="diagram" class="diagram"></div>
-    </div>
-
+    <div class="timer-container" id="timer-ui"><div id="timer-bar" class="timer-bar"></div></div>
+    <div class="question-box"><div id="puzzle-type" class="puzzle-type">LOADING...</div><div id="diagram" class="diagram"></div></div>
     <div id="options" class="options-grid"></div>
 </div>
 
 <script>
     const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
+    tg.expand(); tg.ready();
 
-    // Game Variables
-    let score = 0;
-    let timerInterval;
-    let correctAnswer = null;
+    let score = 0; let timerInterval; let correctAnswer = null;
+    let isTimerMode = true; let baseMaxTime = 20000, baseMinTime = 13000, timeLeft = baseMaxTime;
+    let solvedPuzzles = new Set(); 
 
-    // Settings Variables
-    let isTimerMode = true;
-    let baseMaxTime = 20000; // Default 20s
-    let baseMinTime = 13000;  // Default 13s
-    let timeLeft = baseMaxTime;
-
-    // --- UI CONFIGURATION ---
     function setMode(mode) {
         tg.HapticFeedback.impactOccurred('light');
         isTimerMode = (mode === 'timer');
         document.getElementById('btn-timer').classList.toggle('active', isTimerMode);
         document.getElementById('btn-relax').classList.toggle('active', !isTimerMode);
         document.getElementById('timer-config').style.display = isTimerMode ? 'block' : 'none';
-        document.getElementById('relax-text').style.display = isTimerMode ? 'none' : 'block';
     }
 
     function showStartScreen() {
@@ -304,68 +128,166 @@
         document.getElementById('start-screen').style.display = 'flex';
     }
 
-    // --- PUZZLE GENERATORS ---
-    function generateLogicGate() {
-        const A = Math.round(Math.random()); const B = Math.round(Math.random());
-        const gates = ['AND', 'OR', 'XOR', 'NAND', 'NOR'];
-        const gate = gates[Math.floor(Math.random() * gates.length)];
-        let out = gate==='AND'?A&B : gate==='OR'?A|B : gate==='XOR'?A^B : gate==='NAND'?!(A&B)?1:0 : !(A|B)?1:0;
-        correctAnswer = out.toString();
-        return { type: "Logic Gate", diagram: `[In A: ${A}]\n   │\n   ├──[ ${gate} ]──► ?\n   │\n[In B: ${B}]`, options: ['0', '1'], layout: 'full' };
-    }
+    // --- MATH GENERATORS WITH KaTeX ---
+    function generateAdvancedCalculus() {
+        const vars = ['x', 't', '\\theta'];
+        const v = vars[Math.floor(Math.random() * vars.length)];
+        const types = ['diff_chain', 'diff_prod', 'int_sub', 'int_def'];
+        const type = types[Math.floor(Math.random() * types.length)];
 
-    function generateCircuit() {
-        const s1 = Math.round(Math.random()); const s2 = Math.round(Math.random());
-        const isSeries = Math.random() > 0.5;
-        let out = isSeries ? (s1 && s2) : (s1 || s2);
-        correctAnswer = out ? "ON" : "OFF";
-        let strS1 = s1 ? "[━/ ━ Closed]" : "[━/  Open]"; let strS2 = s2 ? "[━/ ━ Closed]" : "[━/  Open]";
-        let diagram = isSeries ? `⚡ PWR ── ${strS1} ── ${strS2} ── 💡 ?` : `      ┌── ${strS1} ──┐\n⚡ PWR ─┤              ├─ 💡 ?\n      └── ${strS2} ──┘`;
-        return { type: "Circuit State", diagram: diagram, options: ['ON', 'OFF'], layout: 'full' };
-    }
+        let q, a, wrong = [];
+        let a_val = Math.floor(Math.random() * 5) + 2; 
+        let b_val = Math.floor(Math.random() * 5) + 2;
 
-    function generateBoolean() {
-        const pz = [{ q: "A + A'B", a: "A + B", w: ["A", "B", "A' + B"] }, { q: "A(A + B)", a: "A", w: ["A + B", "B", "AB"] }, { q: "A + A'", a: "1", w: ["0", "A", "A'"] }];
-        const p = pz[Math.floor(Math.random() * pz.length)];
-        correctAnswer = p.a;
-        return { type: "Boolean Algebra", diagram: `Simplify:\n\nF = ${p.q}`, options: [p.a, ...p.w].sort(()=>Math.random()-0.5), layout: 'grid' };
-    }
-
-    function generateBaseConversion() {
-        const num = Math.floor(Math.random() * 20) + 5; const isToBin = Math.random() > 0.5;
-        correctAnswer = isToBin ? num.toString(2) : num.toString();
-        let q = isToBin ? `Dec to Bin:\n\n${num} = ?` : `Bin to Dec:\n\n${num.toString(2)} = ?`;
-        let opts = [correctAnswer];
-        while(opts.length < 4) {
-            let f = isToBin ? (num + Math.floor(Math.random()*6)-3).toString(2) : (num + Math.floor(Math.random()*6)-3).toString();
-            if(!opts.includes(f) && f !== "0" && f.indexOf('-') === -1) opts.push(f);
+        if (type === 'diff_chain') {
+            q = `\\frac{d}{d${v}} \\left[ \\ln(${a_val}${v}^2 + ${b_val}) \\right]`;
+            a = `\\frac{${2 * a_val}${v}}{${a_val}${v}^2 + ${b_val}}`;
+            wrong = [`\\frac{1}{${a_val}${v}^2 + ${b_val}}`, `\\frac{${a_val}${v}}{${a_val}${v}^2 + ${b_val}}`, `\\frac{${2 * a_val}${v}}{\\ln(${a_val}${v}^2 + ${b_val})}`];
+        } else if (type === 'diff_prod') {
+            let n = Math.floor(Math.random() * 3) + 2; 
+            q = `\\frac{d}{d${v}} \\left[ ${v}^{${n}} e^{${a_val}${v}} \\right]`;
+            a = `${v}^{${n-1}} e^{${a_val}${v}} (${n} + ${a_val}${v})`;
+            wrong = [`${v}^{${n}} e^{${a_val}${v}} (${n} + ${a_val}${v})`, `${n}${v}^{${n-1}} e^{${a_val}${v}}`, `${v}^{${n-1}} e^{${a_val}${v}} (${n}${v} + ${a_val})`];
+        } else if (type === 'int_sub') {
+            let coeff = 2 * a_val;
+            q = `\\int ${coeff}${v} \\cos(${a_val}${v}^2) d${v}`;
+            a = `\\sin(${a_val}${v}^2) + C`;
+            wrong = [`-\\sin(${a_val}${v}^2) + C`, `${coeff} \\sin(${a_val}${v}^2) + C`, `\\cos(${a_val}${v}^2) + C`];
+        } else {
+            q = `\\int_{0}^{1} ${a_val * b_val} e^{${b_val}${v}} d${v}`;
+            a = `${a_val}(e^{${b_val}} - 1)`;
+            wrong = [`${a_val}e^{${b_val}}`, `${a_val * b_val}(e^{${b_val}} - 1)`, `${b_val}(e^{${a_val}} - 1)`];
         }
-        return { type: "Base Conversion", diagram: q, options: opts.sort(()=>Math.random()-0.5), layout: 'grid' };
+        correctAnswer = a;
+        return { type: "Advanced Calculus", id: `Calc_${q}_${Math.random()}`, diagram: q, options: [a, ...wrong].sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
     }
 
-    function generatePattern() {
-        let start = Math.floor(Math.random() * 4) + 2; let mult = Math.floor(Math.random() * 2) + 2; let isAdd = Math.random() > 0.5;
-        let s = isAdd ? [start, start+mult, start+mult*2] : [start, start*mult, start*mult*mult];
-        let ans = isAdd ? start+mult*3 : start*mult*mult*mult; correctAnswer = ans.toString();
-        let opts = [correctAnswer, (ans+mult).toString(), (ans-1).toString(), (ans+2).toString()];
-        return { type: "Pattern Matching", diagram: `Find next in sequence:\n\n[ ${s.join(', ')},  ?  ]`, options: opts.sort(()=>Math.random()-0.5), layout: 'grid' };
+    function generateAdvancedBoolean() {
+        const templates = [
+            { q: `(A + B)' + (A'B)'`, a: `1`, w: [`A'`, `B'`, `A'B`] },
+            { q: `A(A + B) + B(B + C)`, a: `A + B`, w: [`A + BC`, `AB + BC`, `B + C`] },
+            { q: `(X + Y)(X' + Z)(Y + Z)`, a: `(X + Y)(X' + Z)`, w: [`(X+Z)(Y+Z)`, `X'Y + XZ`, `XYZ`] }
+        ];
+        let p = templates[Math.floor(Math.random() * templates.length)];
+        let v1 = Math.random() > 0.5 ? 'P' : 'X'; let v2 = Math.random() > 0.5 ? 'Q' : 'Y'; let v3 = Math.random() > 0.5 ? 'R' : 'Z';
+        let q_str = "F = " + p.q.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3);
+        let a_str = p.a.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3);
+        let w_strs = p.w.map(w => w.replace(/A/g, v1).replace(/B/g, v2).replace(/C/g, v3));
+        correctAnswer = a_str;
+        return { type: "Boolean Theorem", id: `Bool_${q_str}_${Math.random()}`, diagram: q_str, options: [a_str, ...w_strs].sort(()=>Math.random()-0.5), isLatex: true, layout: 'grid' };
     }
 
-    function generateModulo() {
-        let a = Math.floor(Math.random() * 15) + 5; let b = Math.floor(Math.random() * 10) + 2; let mod = Math.floor(Math.random() * 5) + 3;
-        let ans = (a + b) % mod; correctAnswer = ans.toString();
-        let opts = [correctAnswer];
-        while(opts.length < 4) { let f = Math.floor(Math.random() * mod).toString(); if(!opts.includes(f)) opts.push(f); }
-        return { type: "Modulo Arithmetic", diagram: `Calculate Remainder:\n\n( ${a} + ${b} ) % ${mod} = ?`, options: opts.sort(()=>Math.random()-0.5), layout: 'grid' };
+    // --- HTML5 CANVAS SCHEMATIC GENERATOR ---
+    function generateSchematicCircuit() {
+        const s1 = Math.random() > 0.5; // Series switch (Main)
+        const s2 = Math.random() > 0.5; // Parallel switch (Short circuit path)
+        
+        // Engineering Logic: 
+        // If s1 is open, no current flows (OFF).
+        // If s1 is closed AND s2 is closed, current takes the short circuit path, bypassing the bulb (OFF).
+        // If s1 is closed AND s2 is open, current flows through the bulb (ON).
+        const isOn = s1 && !s2;
+        correctAnswer = isOn ? "ON" : "OFF";
+        
+        const canvasHtml = `
+            <div style="font-family:'Fira Code'; color:#aaa; font-size:0.9rem; margin-bottom:5px;">Find Bulb State:</div>
+            <canvas id="circuitCanvas" width="300" height="200"></canvas>
+        `;
+
+        const renderCanvas = () => {
+            const canvas = document.getElementById('circuitCanvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // Neon Style
+            ctx.strokeStyle = '#0ff';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            // Left Wire & DC Source
+            ctx.beginPath(); ctx.moveTo(40, 50); ctx.lineTo(40, 80); ctx.stroke();
+            ctx.beginPath(); ctx.arc(40, 100, 20, 0, Math.PI*2); ctx.stroke();
+            ctx.fillStyle = '#0ff'; ctx.font = '18px Orbitron'; 
+            ctx.fillText('+', 34, 94); ctx.fillText('-', 36, 118);
+            ctx.beginPath(); ctx.moveTo(40, 120); ctx.lineTo(40, 150); ctx.stroke();
+
+            // Bottom Wire
+            ctx.beginPath(); ctx.moveTo(40, 150); ctx.lineTo(260, 150); ctx.stroke();
+
+            // Top Wire & S1
+            ctx.beginPath(); ctx.moveTo(40, 50); ctx.lineTo(100, 50); ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(100, 50, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath();
+            if(s1) { ctx.moveTo(100, 50); ctx.lineTo(140, 50); ctx.strokeStyle='#0f0';} // Closed
+            else { ctx.moveTo(100, 50); ctx.lineTo(135, 30); ctx.strokeStyle='#f00';} // Open
+            ctx.stroke(); ctx.strokeStyle='#0ff'; // Reset color
+            ctx.beginPath(); ctx.arc(140, 50, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(140, 50); ctx.lineTo(260, 50); ctx.stroke();
+            ctx.fillStyle = '#aaa'; ctx.font = '12px Fira Code'; ctx.fillText('S1', 115, 25);
+
+            // Middle Wire (Short Circuit Path) & S2
+            ctx.beginPath(); ctx.moveTo(150, 50); ctx.lineTo(150, 80); ctx.stroke();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(150, 80, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath();
+            if(s2) { ctx.moveTo(150, 80); ctx.lineTo(150, 120); ctx.strokeStyle='#0f0'; } // Closed
+            else { ctx.moveTo(150, 80); ctx.lineTo(175, 115); ctx.strokeStyle='#f00'; } // Open
+            ctx.stroke(); ctx.strokeStyle='#0ff'; // Reset color
+            ctx.beginPath(); ctx.arc(150, 120, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(150, 120); ctx.lineTo(150, 150); ctx.stroke();
+            ctx.fillStyle = '#aaa'; ctx.fillText('S2', 170, 100);
+
+            // Right Wire & Bulb
+            ctx.beginPath(); ctx.moveTo(260, 50); ctx.lineTo(260, 80); ctx.stroke();
+            ctx.beginPath(); ctx.arc(260, 100, 20, 0, Math.PI*2); ctx.stroke();
+            // Cross inside bulb
+            ctx.beginPath(); ctx.moveTo(246, 86); ctx.lineTo(274, 114); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(274, 86); ctx.lineTo(246, 114); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(260, 120); ctx.lineTo(260, 150); ctx.stroke();
+            ctx.fillStyle = '#ff007f'; ctx.fillText('Bulb', 245, 140);
+            
+            // Nodes (Connection dots)
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(150, 50, 4, 0, Math.PI*2); ctx.fill();
+            ctx.beginPath(); ctx.arc(150, 150, 4, 0, Math.PI*2); ctx.fill();
+        };
+
+        return { 
+            type: "Schematic Logic", 
+            id: `CanvasCirc_${s1}_${s2}_${Math.random()}`, 
+            diagram: canvasHtml, 
+            render: renderCanvas,
+            options: ['ON', 'OFF'], 
+            isLatex: false, 
+            layout: 'full' 
+        };
     }
 
     // --- GAME ENGINE ---
     function loadRandomPuzzle() {
-        const generators = [generateLogicGate, generateCircuit, generateBoolean, generateBaseConversion, generatePattern, generateModulo];
-        const puzzleData = generators[Math.floor(Math.random() * generators.length)]();
+        const generators = [generateAdvancedCalculus, generateAdvancedBoolean, generateSchematicCircuit];
+        let puzzleData;
+        let attempts = 0;
+        
+        do {
+            puzzleData = generators[Math.floor(Math.random() * generators.length)]();
+            attempts++;
+            if(attempts > 50) { solvedPuzzles.clear(); break; }
+        } while (solvedPuzzles.has(puzzleData.id));
+
+        solvedPuzzles.add(puzzleData.id);
         
         document.getElementById('puzzle-type').innerText = puzzleData.type;
-        document.getElementById('diagram').innerText = puzzleData.diagram;
+        const diagramEl = document.getElementById('diagram');
+        
+        if (puzzleData.isLatex) {
+            katex.render(puzzleData.diagram, diagramEl, { displayMode: true, throwOnError: false });
+        } else {
+            diagramEl.innerHTML = puzzleData.diagram;
+            if(puzzleData.render) puzzleData.render(); // Draw Canvas!
+        }
         
         const optContainer = document.getElementById('options');
         optContainer.className = puzzleData.layout === 'full' ? 'options-grid full' : 'options-grid';
@@ -373,7 +295,11 @@
 
         puzzleData.options.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'option-btn'; btn.innerText = opt;
+            btn.className = 'option-btn'; 
+            
+            if (puzzleData.isLatex) { katex.render(opt, btn, { throwOnError: false }); } 
+            else { btn.innerHTML = opt; }
+
             btn.onclick = () => handleAnswer(opt);
             optContainer.appendChild(btn);
         });
@@ -383,13 +309,10 @@
 
     function startTimer() {
         clearInterval(timerInterval);
-        
         if (!isTimerMode) return; 
 
-        // Calculate dynamic max time based on score
         let currentMaxTime = Math.max(baseMinTime, baseMaxTime - (score * 200));
         timeLeft = currentMaxTime;
-        
         const timerBar = document.getElementById('timer-bar');
 
         timerInterval = setInterval(() => {
@@ -428,15 +351,13 @@
 
     function startGame() {
         tg.HapticFeedback.impactOccurred('medium');
-        
+        solvedPuzzles.clear(); 
+
         if (isTimerMode) {
             let uMax = parseInt(document.getElementById('input-max').value);
             let uMin = parseInt(document.getElementById('input-min').value);
-            
-            // Validate user input, fallback to 20s/13s if invalid
             baseMaxTime = (isNaN(uMax) || uMax < 2) ? 20000 : uMax * 1000;
             baseMinTime = (isNaN(uMin) || uMin < 1) ? 13000 : uMin * 1000;
-            
             if(baseMinTime > baseMaxTime) baseMinTime = baseMaxTime; 
 
             document.getElementById('timer-ui').style.display = 'block';
@@ -451,10 +372,9 @@
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('game-over-screen').style.display = 'none';
         
-        loadRandomPuzzle();
+        setTimeout(loadRandomPuzzle, 100);
     }
 
 </script>
 </body>
-  </html>
-  
+</html>
